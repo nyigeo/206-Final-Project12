@@ -28,6 +28,7 @@ def write_json(cache_filename, dict):
 
 def get_request_url(fruit_name):
     #HEADERS = {'authorization': 'Bearer ' + API_KEY}
+    #dd
     r = requests.get(f'https://www.fruityvice.com/api/fruit/{fruit_name}')
     # most healthy: cherry, grapefruit
     # most unhealthy: bananas, mangoes, pineapples 
