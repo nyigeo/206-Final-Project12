@@ -26,6 +26,30 @@ def write_json(cache_filename, dict):
     with open(cache_filename, 'w') as file: 
         file.write(dump_file) 
 
+def get_data_using_cache(list, cache_filename):
+    request_url =  get_request_url(list)
+    dictionary = read_json(cache_filename)
+    if request_url in dictionary:
+        print("Using cache for {}".format(list))
+        return dictionary[request_url]
+    else: 
+        print("Fetching data for {}".format(list))
+        try: 
+            url = requests.get(request_url).text
+            book_info = json.loads(url)
+            if book_info["status"] == "OK":
+                dictionary[request_url] = book_info["results"]
+                write_json(cache_filename, dictionary)
+                return dictionary.get(request_url)
+            else: 
+                print("No list found for list name provided.")
+                return None 
+        except:
+            print("Exception")
+            return None
+
+def get_calories():
+
 def get_request_url(fruit_name):
     #HEADERS = {'authorization': 'Bearer ' + API_KEY}
     #dd
