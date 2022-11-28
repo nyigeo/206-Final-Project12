@@ -3,6 +3,7 @@ import json
 import unittest
 import os
 import requests
+import matplotlib.pyplot as plt
 import re 
 from xml.sax import parseString
 from bs4 import BeautifulSoup
@@ -48,17 +49,71 @@ def get_data_using_cache(list, cache_filename):
             print("Exception")
             return None
 
-def get_calories():
+def get_info(fruit):
+    fruit_info = {}
+    for i,j in fruit.items():
+        if i == 'name':
+            nutrition = {}
+            for key,value in fruit['nutritions'].items():
+                if key == 'protein':
+                    nutrition[key] = value
+                elif key == 'calories':
+                    nutrition[key] = value
+                elif key == 'sugar':
+                    nutrition[key] = value
+            fruit_info[j] = nutrition  
+    return fruit_info
+def get_calories(list_of_fruits):
+    
+    dict_fruits = {}
+    for fruit in list_of_fruits:
+        for key,value in fruit.items():
+            for i,j in value.items():
+                if i == 'calories':
+                    dict_fruits[key] = j
+    return dict_fruits
+def get_protein(list_of_fruits):
+    dict_fruits = {}
+    for fruit in list_of_fruits:
+        for key,value in fruit.items():
+            for i,j in value.items():
+                if i == 'protein':
+                    dict_fruits[key] = j
+    return dict_fruits
+def get_sugar(list_of_fruits):
+    dict_fruits = {}
+    for fruit in list_of_fruits:
+        for key,value in fruit.items():
+            for i,j in value.items():
+                if i == 'sugar':
+                    dict_fruits[key] = j
+    return dict_fruits
+        
+    # if fruit['nutritions'].keys() == 'protein':
+    #     protein = {'protein': fruit['nutritions']['protein']}
+    #     fruit_info.update(protein) 
+
+    # elif fruit['nutritions'].keys() == 'calories':
+    #     calories = {'calories': fruit['nutritions']['calories']}
+    #     fruit_info.update(calories)
+        
+    # elif fruit['nutritions'].keys() == 'sugar':
+    #     sugar = {'sugar': fruit['nutritions']['sugar']}
+    #     fruit_info.update(sugar)
+
+    return fruit_info
 
 def get_request_url(fruit_name):
     #HEADERS = {'authorization': 'Bearer ' + API_KEY}
     #dd
-    r = requests.get(f'https://www.fruityvice.com/api/fruit/{fruit_name}')
+    r = requests.get(f"https://www.fruityvice.com/api/fruit/{fruit_name}")
     # most healthy: cherry, grapefruit
     # most unhealthy: bananas, mangoes, pineapples 
     #url = f"https://open.tiktokapis.com/v2/user/info/5b17fb869d9cf530dd9a6b45cf9228bf"
    # HEADERS = {'authorization': 'Bearer ' + API_KEY}
-    print(r.text)
+    # print(r.text)
+    return r.json()
+
 
 # url = "https://tasty.p.rapidapi.com/recipes/auto-complete"
 
@@ -109,12 +164,34 @@ def display_fruit_order():
     #display the fruit order 
     pass
 def main():
-    get_request_url('banana') 
-    get_request_url('mango') 
-    get_request_url('pineapple')
-    get_request_url('cherry')
-    get_request_url('plum')
-    get_request_url('kiwi')
+    banana = get_request_url('banana') 
+    mango = get_request_url('mango') 
+    pineapple = get_request_url('pineapple')
+    cherry = get_request_url('cherry')
+    plum = get_request_url('plum')
+    kiwi = get_request_url('kiwi')
+    banana2 = get_info(banana)
+    mango2 = get_info(mango) 
+    pineapple2 = get_info(pineapple)
+    cherry2 = get_info(cherry)
+    plum2 = get_info(plum)
+    kiwi2 = get_info(kiwi)
+    list_of_fruits = [banana2,mango2,pineapple2,cherry2,plum2,kiwi2]
+    
+    print(get_calories(list_of_fruits))
+    print(get_protein(list_of_fruits))
+    print(get_sugar(list_of_fruits))
+
+    
+    print(get_info(cherry))
+    print(get_info(mango))
+    
+
+    # print(banana)
+    
+
+
+
     pass
 
 if __name__ == "__main__":
