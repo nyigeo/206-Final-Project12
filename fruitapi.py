@@ -3,6 +3,7 @@ import json
 import unittest
 import os
 import requests
+import plotly.express as px
 import matplotlib.pyplot as plt
 import re 
 from xml.sax import parseString
@@ -88,6 +89,13 @@ def get_sugar(list_of_fruits):
                 if i == 'sugar':
                     dict_fruits[key] = j
     return dict_fruits
+def get_plot(data):
+    x = list(data.keys())
+    y = list(data.values())
+    # data = px.data.gapminder().query("co == 'Canada'")
+    fig = px.bar(x=x,y=y)
+    fig.show()
+        
         
     # if fruit['nutritions'].keys() == 'protein':
     #     protein = {'protein': fruit['nutritions']['protein']}
@@ -101,7 +109,7 @@ def get_sugar(list_of_fruits):
     #     sugar = {'sugar': fruit['nutritions']['sugar']}
     #     fruit_info.update(sugar)
 
-    return fruit_info
+    # return fruit_info
 
 def get_request_url(fruit_name):
     #HEADERS = {'authorization': 'Bearer ' + API_KEY}
@@ -185,6 +193,14 @@ def main():
     
     print(get_info(cherry))
     print(get_info(mango))
+    data1 = get_calories(list_of_fruits)
+    data2 = get_protein(list_of_fruits)
+    data3 = get_sugar(list_of_fruits)
+    list_of_nutrition = [data1,data2,data3]
+    for item in list_of_nutrition:
+        get_plot(item)
+   
+
     
 
     # print(banana)
