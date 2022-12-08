@@ -8,18 +8,18 @@ from xml.sax import parseString
 from bs4 import BeautifulSoup
 
 def found_fruits():
-   url = 'https://simple.wikipedia.org/wiki/List_of_fruits'
+   url = 'https://snaped.fns.usda.gov/seasonal-produce-guide'
    response = requests.get(url)
    soup = BeautifulSoup(response.content,'html.parser')
    #var = 'component page-object text'
-   fruits = soup.find('div',{'class':'div-col'}).find('ul')
-   text = list(fruits.descendants)
-   # print(text)
-   fruitlist = []
-   for i in range(2,len(text)):
-      if '\n' not in text[i].text and text[i].text not in fruitlist and '(' not in text[i].text and ')' not in text[i].text:
-         fruitlist.append(text[i].text)
-   return fruitlist
+   fruits = soup.find('div',{'class':'paragraph paragraph--type-view paragraph--view-mode-default'})
+
+   season_list = ['Spring', 'Summer', 'Winter', 'Fall']
+   fruit_list = []
+   for fruit in fruits.text.split():
+        if fruit not in season_list:
+            fruit_list.append(fruit)
+   print(fruit_list)
 
 
 
@@ -30,12 +30,12 @@ def setUpDatabase(db_name):
     return cur, conn
 
 # Creates list of species ID's and numbers
-def create_fruits_table(cur, conn, fruitlist):
+def create_fruits_table(cur, conn, fruit_list):
 
     cur.execute("DROP TABLE IF EXISTS matchedfruit")
     cur.execute("CREATE TABLE matchedfruit (id INTEGER PRIMARY KEY, FruitName TEXT)")
-    for i in range(len(fruitlist)):
-        cur.execute("INSERT INTO matchedfruit (id,FruitName) VALUES (?,?)",(i,fruitlist[i]))
+    for i in range(len(fruit_list)):
+        cur.execute("INSERT INTO matchedfruit (id,FruitName) VALUES (?,?)",(i,fruit_list[i]))
     conn.commit()
 
 
@@ -52,7 +52,9 @@ def main():
    #  add_pets_from_json('pets.json', cur, conn)
    #  ls = (non_aggressive_pets(10, cur, conn))
    #  print(ls)
+
     
     
 if __name__ == "__main__":
-    main()
+     main()
+     unittest.main(verbosity = 2)
