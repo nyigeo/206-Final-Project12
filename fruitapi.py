@@ -6,8 +6,11 @@ import requests
 import plotly.express as px
 import matplotlib.pyplot as plt
 import re 
+import sqlite3
 from xml.sax import parseString
 from bs4 import BeautifulSoup
+import wikifruit
+# from get_matches import wikifruit.py 
 
 #API_KEY = "5b17fb869d9cf530dd9a6b45cf9228bf"
 # HEADERS = {'Authorization': 'Bearer {}'.format(API_KEY),
@@ -16,6 +19,7 @@ from bs4 import BeautifulSoup
 #            'Course-Info': 'https://si.umich.edu/programs/courses/507'
 # }
 
+print(wikifruit.found_fruits())
 def read_json(cache_filename):
     try: 
         with open(cache_filename, 'r', encoding="utf-8") as file:
@@ -89,12 +93,17 @@ def get_sugar(list_of_fruits):
                 if i == 'sugar':
                     dict_fruits[key] = j
     return dict_fruits
+
+
+
+
 def get_plot(data):
     x = list(data.keys())
     y = list(data.values())
     # data = px.data.gapminder().query("co == 'Canada'")
     fig = px.bar(x=x,y=y)
     fig.show()
+
         
         
     # if fruit['nutritions'].keys() == 'protein':
@@ -171,6 +180,20 @@ def display_fruit_genus_():
 def display_fruit_order():
     #display the fruit order 
     pass
+
+
+def matched_fruits(list_of_fruits):
+    new_fruit_list = []
+
+    fruit_list = wikifruit.found_fruits()
+    for fruit in fruit_list:
+        for fruit2 in list_of_fruits:
+            if fruit2[:4].lower() in fruit.lower():
+                new_fruit_list.append(fruit2)
+
+    print(new_fruit_list)
+            
+
 def main():
     banana = get_request_url('banana') 
     mango = get_request_url('mango') 
@@ -185,6 +208,9 @@ def main():
     plum2 = get_info(plum)
     kiwi2 = get_info(kiwi)
     list_of_fruits = [banana2,mango2,pineapple2,cherry2,plum2,kiwi2]
+    list_of_fruits_name = [list(item.keys())[0] for item in list_of_fruits]
+    matched_fruits(list_of_fruits_name)
+
     
     print(get_calories(list_of_fruits))
     print(get_protein(list_of_fruits))
@@ -200,14 +226,7 @@ def main():
     for item in list_of_nutrition:
         get_plot(item)
    
-
     
-
-    # print(banana)
-    
-
-
-
     pass
 
 if __name__ == "__main__":
