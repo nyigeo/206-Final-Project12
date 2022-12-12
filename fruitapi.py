@@ -10,6 +10,9 @@ import sqlite3
 from xml.sax import parseString
 from bs4 import BeautifulSoup
 import wikifruit
+import statistics
+from statistics import mean
+from fractions import Fraction as f
 # from get_matches import wikifruit.py 
 
 #API_KEY = "5b17fb869d9cf530dd9a6b45cf9228bf"
