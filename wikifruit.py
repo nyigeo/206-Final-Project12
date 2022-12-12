@@ -24,10 +24,18 @@ def found_fruits():
 #    letter_fruit = []
 #    for fruit in fruit_list:
 
+def pie_chart(fruit_list): 
+   Bananas = fruit_list.count('Bananas')
+   Limes = fruit_list.count('Limes')
+   Mushrooms = fruit_list.count('Mushrooms')
+   Onions = fruit_list.count('Onions')
+   x = [Bananas, Limes, Mushrooms, Onions]
+   fig, ax = plt.subplots()
+   ax.pie(x, radius=3, center=(4, 4), labels = ['Bananas','Limes', 'Mushrooms', 'Onions'],shadow=True,startangle=90)
+   ax.axis('equal')
+   plt.tight_layout()
+   plt.show()  
     
-    
-    
-
 def found_season():
 #    url = 'https://snaped.fns.usda.gov/seasonal-produce-guide'
 #    response = requests.get(url)
@@ -42,7 +50,9 @@ def found_season():
     #      if 'Spring' 'Summer' 'Winter' 'Fall':
  return seasons_list 
 
-   
+def found_temperature(): 
+   temperature_list = ['Celsius', 'Fahrenheit']
+   return temperature_list
 
 def setUpDatabase(db_name):
     path = os.path.dirname(os.path.abspath(__file__))
@@ -66,17 +76,25 @@ def create_seasons_table(cur, conn, seasons_list):
         cur.execute("INSERT INTO matchedseasons (id,SeasonName) VALUES (?,?)",(i,seasons_list[i]))
     conn.commit()
 
+def create_temperature_table(cur, conn, temperature_list):
 
+    cur.execute("DROP TABLE IF EXISTS matchedtemperature")
+    cur.execute("CREATE TABLE matchedtemperature (id INTEGER PRIMARY KEY, TemperatureName TEXT)")
+    for i in range(len(temperature_list)):
+        cur.execute("INSERT INTO matchedtemperature (id,TemperatureName) VALUES (?,?)",(i,temperature_list[i]))
+    conn.commit()
 
 def main():
     # SETUP DATABASE AND TABLE
     something = found_fruits()
     something2 = found_season()
+    something3 = found_temperature()
     cur, conn = setUpDatabase('fruits.db')
     create_fruits_table(cur, conn, something)
     create_seasons_table(cur, conn, something2)
+    create_temperature_table(cur, conn, something3)
    
-
+    pie_chart(something)
     # create_patients_table(cur, conn)
    #  add_fluffle(cur, conn)
    #  add_pets_from_json('pets.json', cur, conn)
