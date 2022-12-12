@@ -181,6 +181,29 @@ def display_fruit_order():
     #display the fruit order 
     pass
 
+def get_get_plot(data):
+    x = list(data.keys())
+    y = list(data.values())
+    fig = px.bar(x=x, y=y, labels = {'x': "Calculated Mean", 'y':"Average Mean for Nutritional Facts"}, title = "Finding the Mean For Three Nutritional Facts")
+    # xlabel = Calories 
+    # # ylabel = Fruit
+    # px.xlabel("Average Pulse")
+    # px.ylabel("Calorie Burnage")
+    fig.show()
+    print(data) 
+    
+    def mean(): 
+    graph_dict = {}
+    calories = [96, 60, 50, 50, 46, 61]
+    protein = [1, 0.82, 0.54, 1, 0.7, 1.1]
+    sugar = [17.2, 13.7, 9.85, 8, 9.92, 9]
+    x = statistics.mean(calories)
+    y = statistics.mean(protein)
+    f = statistics.mean(sugar)
+    graph_dict['calories']= x
+    graph_dict['protein'] = y
+    graph_dict['sugar'] = f
+    return graph_dict
 
 def matched_fruits(list_of_fruits):
     new_fruit_list = []
@@ -222,12 +245,17 @@ def main():
     data1 = get_calories(list_of_fruits)
     data2 = get_protein(list_of_fruits)
     data3 = get_sugar(list_of_fruits)
-    list_of_nutrition = [data1,data2,data3]
-    for item in list_of_nutrition:
-        get_plot(item)
-   
+#     list_of_nutrition = [data1,data2,data3]
+#     for item in list_of_nutrition:
+#         get_plot(item)
+    print(get_plot)
+    get_plot(data1, xlabel='Fruit', ylabel='Calories', title = 'Find Calories')
+    get_plot(data2, xlabel='Fruit', ylabel='Protein', title = 'Find Protein')
+    get_plot(data3, xlabel='Fruit', ylabel='Sugar', title = 'Find Sugar')
+
+    somethings = mean()
+    get_get_plot(somethings)
     
-    pass
 
 if __name__ == "__main__":
     main()
